@@ -10,6 +10,13 @@ import { useStateContext } from '../context/ContextProvider'
 const Sidebar = () => {
   const { activeMenu, setActiveMenu, screenSize } = useStateContext();
 
+  //fecha a sidebar caso o menu esteja aberto e a tela seja menor que 900px, chamamos essa função no onClick do primeiro Link component
+  const handleCloseSideBar = () => {
+    if(activeMenu && screenSize <= 900){
+      setActiveMenu(false)
+    }
+  }
+
   const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-white text-md m-2'
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2'
 
@@ -17,7 +24,7 @@ const Sidebar = () => {
     <div className='ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
       {activeMenu && (<>
         <div className='flex justify-between items-center'>
-          <Link to="/" onClick={() => setActiveMenu(false) } className="items-center gap-3 ml-3 mt-4 flex text-x1 font-extrabold tracking-tight dark:text-white text-slate-900">
+          <Link to="/" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-x1 font-extrabold tracking-tight dark:text-white text-slate-900">
             <SiShopware/> <span>Shoppy</span>
           </Link>
           <TooltipComponent content="Menu" position="BottomCenter">
@@ -35,7 +42,7 @@ const Sidebar = () => {
               {item.links.map((link) => (
                 <NavLink to={`/${link.name}`}
                 key={link.name}
-                onClick={() => {}}
+                onClick={handleCloseSideBar} //aqui o menu se fecha toda vez que abrimos uma página nova numa tela menor que 900px
                 className={({isActive}) => isActive ? activeLink : normalLink}
                 >
                   {link.icon}
