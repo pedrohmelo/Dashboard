@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { FiShoppingCart } from 'react-icons/fi';
 import { BsChatLeft } from 'react-icons/bs';
@@ -30,7 +30,27 @@ const NavButton = ({title, customFunc, icon, color, dotColor}) => (
 )
 
 const Navbar = () => {
-  const { activeMenu, setActiveMenu, isClicked, setIsClicked, handleClick } = useStateContext();
+  const { activeMenu, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize, setScreenSize } = useStateContext();
+
+  //basicamente esta funciona para pegar o tamanho da tela apenas uma vez
+  useEffect(() => {
+    const handleResize = () => setScreenSize(window.innerWidth);
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return() => window.removeEventListener('resize', handleResize);
+  }, [])
+
+  //aqui nós escondemos a barra de menu lateral em telas menores que 900px
+  useEffect(() => {
+    if(screenSize <= 900){
+      setActiveMenu(false);
+    } else{
+      setActiveMenu(true);
+    }
+  }, [screenSize]);
 
   return (
     <div className='flex justify-between p-2 md:mx-6 relative'>
